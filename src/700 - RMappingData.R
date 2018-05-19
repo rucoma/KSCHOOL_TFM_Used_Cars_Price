@@ -5,7 +5,7 @@
 
 
 # Required libraries
-listPackages <- c('rgdal', 'ggplot2', 'ggmap', 'plotly')
+listPackages <- c('rgdal', 'ggplot2', 'ggmap', 'plotly', 'tidyverse')
 newPackages <- listPackages[!(listPackages %in% installed.packages()[,'Package'])]
 if(length(newPackages)) install.packages(newPackages)
 
@@ -16,6 +16,7 @@ library(rgdal)
 library(ggplot2)
 library(ggmap)
 library(plotly)
+library(tidyverse)
 
 shapefile <- readOGR('~/Dropbox/MOOCs/KSCHOOL/DATA SCIENCE/TFM/plz-gebiete.shp/', 'plz-gebiete')
 
@@ -42,3 +43,22 @@ map <- ggplot() +
             size = .1) +
   theme_minimal()
 map
+
+## New shapefiles --------------------------------------------------------------
+shapefiles <- list.files(path = '~/Dropbox/MOOCs/KSCHOOL/DATA SCIENCE/TFM/gadm36_DEU_shp/',
+                         pattern = '\\.shp') %>% 
+  str_sub(start = 1, end = -5)
+
+# tst <- readOGR(dsn = '../gadm36_DEU_shp/', layer = shapefiles[1])
+  
+for (shapefile in shapefiles){
+  shape <- readOGR(dsn = '../gadm36_DEU_shp/',
+                   layer = shapefile)
+  mapa <- ggplot() +
+    geom_path(data = shape,
+              mapping = aes(x = long, y = lat, group = group))
+  print(mapa)
+}
+
+shape <- readOGR(dsn = '../gadm36_DEU_shp/',
+                 layer = 'gadm36_DEU_2')

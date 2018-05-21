@@ -1,8 +1,8 @@
-## Data cleaning ---------------------------------------------------------------
+## Data cleaning process -------------------------------------------------------
 ## 2018-04-23
 
 # Required libraries
-listPackages <- c('data.table', 'tidyverse', 'lubridate', 'funModeling')
+listPackages <- c('data.table', 'tidyverse', 'lubridate', 'funModeling', 'forcats')
 newPackages <- listPackages[!(listPackages %in% installed.packages()[,'Package'])]
 if(length(newPackages)) install.packages(newPackages)
 
@@ -12,19 +12,44 @@ library(data.table)
 library(tidyverse)
 library(lubridate)
 library(funModeling)
+library(forcats)
+
+## Acquire data ----------------------------------------------------------------
+# Download dataset from Dropbox
+download.file(url = "https://www.dropbox.com/s/3802ph0qspdgtao/autos.csv?dl=1",
+              destfile = './data/autos.csv')
+download.file(url = "https://www.dropbox.com/s/uzzhu05061xjm0z/zipcodes_de_completo.csv?dl=1",
+              destfile = './data/zipcodes_de_completo.csv')
 
 # Load dataset
 filename <- './data/autos.csv'
-datasetCars <- fread(input = filename, stringsAsFactors = TRUE)
+datasetCars <- fread(input = filename, 
+                     stringsAsFactors = TRUE, 
+                     quote = "",
+                     colClasses = c(rep(x = 'factor', 4),
+                                    'numeric',
+                                    rep(x = 'factor', 2),
+                                    'numeric',
+                                    'factor',
+                                    'numeric',
+                                    'factor',
+                                    rep('numeric', 2),
+                                    rep('factor', 7)))
 
-# Data check
+# Data exploration -------------------------------------------------------------
 head(datasetCars)
 str(datasetCars)
-
-# Data exploration
 df_status(datasetCars)
 # describe(datasetCars)
 summary(datasetCars)
+
+# Some variables won't be necessary for the model:
+# datasetCars[, dateCreated := str_sub(string = dateCreated, start = 1, end = 10)]
+# datasetCars[, dateCreated := ymd(dateCreated)]  ## as.Date(dateCreated, format = '%Y-%m%d %H:%M:%S')
+# hist(datasetCars$dateCreated, breaks = 'months')
+# dateCreated could be removed from dataset as well
+deleteCols <- c('dateCrawled', 'dateCreated', 'nrOfPictures', 'lastSeen', 'name', 'abtest')
+datasetCars[, (deleteCols) := NULL]
 
 # Missing values exploration
 any(!complete.cases(datasetCars))
@@ -51,91 +76,112 @@ datasetCars$notRepairedDamage <- assignNA(datasetCars$notRepairedDamage)
 map_dbl(.x = datasetCars, .f = function(x){sum(is.na(x))})
 # Aha! a lot of NA have appeared!! Let's remove them later
 
-# Some variables won't be necessary for the model:
-datasetCars[, dateCreated := str_sub(string = dateCreated, start = 1, end = 10)]
-datasetCars[, dateCreated := ymd(dateCreated)]  ## as.Date(dateCreated, format = '%Y-%m%d %H:%M:%S')
-hist(datasetCars$dateCreated, breaks = 'months')
-# dateCreated could be removed from dataset as well
-deleteCols <- c('dateCrawled', 'dateCreated', 'monthOfRegistration', 'nrOfPictures', 'lastSeen')
-datasetCars[, (deleteCols) := NULL]
 
-# We are not interested in auctions, only in direct sales
-datasetCars <- datasetCars[offerType != 'Gesuch']
+# Distribution of categorical variables ----------------------------------------
+categoricalCols <- c('seller', 'offerType', 'vehicleType', 'gearbox', 'fuelType', 'notRepairedDamage')
+# lapply(datasetCars[, ..categoricalCols], table, useNA = 'always')
+datasetCarsCategorical <- datasetCars[, ..categoricalCols ]
+# Long Format to better visualization
+datasetCarsCategorical <- datasetCarsCategorical %>% gather()
+ggplot(datasetCarsCategorical, aes(value)) +
+  geom_bar() +
+  coord_flip() +
+  facet_wrap(~ key, scales = 'free_y') +
+  theme_light()
+# We are going to remove all NA values unles from notRepairedDamage variable (NA will be converted to 'Not applicable')
+# Brands chart
+ggplot(datasetCars, aes(x = fct_infreq(brand))) +
+  geom_bar() +
+  coord_flip() + 
+  theme_light() +
+  xlab('Brand') +
+  ylab('Count') +
+  labs(title = 'Frequency ob brands in dataset')
+# Models chart
+# ggplot(datasetCars, aes(x = fct_infreq(model))) +
+#   geom_bar() +
+#   coord_flip() + 
+#   theme_light() +
+#   xlab('Model') +
+#   ylab('Count') +
+#   labs(title = 'Frequency ob models in dataset')
 
-# Let's visualize NA values
-# datasetCarsLong <- datasetCars %>%
-#   mutate(pos = 1:n()) %>%
-#   gather(key = "variable", value = "value", -pos) %>%
-#   mutate(absent = is.na(value)) %>%
-#   setDT()
-# 
-# chartNA <-
-#   ggplot(data = datasetCarsLong[variable %in% c('vehicleType', 'gearbox', 'model', 'fuelType', 'notRepairedDamage')],
-#        mapping = aes(x = variable, y = pos, col = absent)) +
-#   geom_point() +
-#   scale_fill_manual(values = c("gray60", "orangered2")) +
-#   theme_bw()
-# 
-# chartNA
 
-# Price will be dependent variable. Some exploration first:
-par(mfrow=c(3,1))
-hist(datasetCars$price, breaks = 50)
-hist(datasetCars$yearOfRegistration, breaks = 50)
-hist(datasetCars$kilometer, breaks = 50)
+# Histograms of numeric variables ----------------------------------------------
+numericalCols <- c('price', 'yearOfRegistration', 'powerPS', 'kilometer', 'monthOfRegistration')
+datasetCarsNumerical <- datasetCars[, ..numericalCols]
+# Long Format to better visualization
+datasetCarsNumerical <- datasetCarsNumerical %>% gather()
+# Charting
+ggplot(datasetCarsNumerical, aes(x=value)) +
+  geom_histogram(bins = 20) +
+  facet_wrap(~key, scales = 'free') +
+  theme_light()
+# It seems kilometer is a categorical variable
+# Month of registration = 0?? Quite strange
+# Power PS, price and year of registration have a lot of outliers!!
+rm(list = c('categoricalCols', 'datasetCarsCategorical', 'datasetCarsNumerical', 'numericalCols', 'deleteCols', 'filename'))
 
+# Cleaning the dataset. Removing NA and invalid cases --------------------------
+# Price
 datasetCars[price == max(price)]
 datasetCars[price == min(price)]
+# Some prices will be dropped from dataset:
+datasetCars <- datasetCars[price > 200 & price <= 200000]
 
+# Year of registration
 datasetCars[yearOfRegistration == max(yearOfRegistration)]
 datasetCars[yearOfRegistration == min(yearOfRegistration)]
-
-datasetCars[kilometer == max(kilometer)]
-datasetCars[kilometer == min(kilometer)]
-
-# Some prices will be dropped from dataset:
-datasetCars <- datasetCars[price > 0 & price <= 50000]
-
 # Some years will be dropped from dataset as well
 datasetCars <- datasetCars[yearOfRegistration > 1950 & yearOfRegistration < 2018]
 
-# Now it looks better
-par(mfrow=c(3,1))
-hist(datasetCars$price)
-hist(datasetCars$yearOfRegistration)
-hist(datasetCars$kilometer)
-
-## Some feature engineering here
-# powerPS variable: (transform with log)
-par(mfrow=c(2,1))
-hist(datasetCars$powerPS, breaks = 100)
-hist(log(datasetCars$powerPS), breaks = 100)
-datasetCars$powerPSLog <- log(datasetCars$powerPS)
-# with log transformation, powerPS = 0 should be removed
-datasetCars <- datasetCars[powerPS > 0]
-
+# Kilometer
+datasetCars[kilometer == max(kilometer)]
+datasetCars[kilometer == min(kilometer)]
 
 # kilometer variable: (seems to be categorical, could refactor)
 datasetCars[, kilometerCategorical := cut(x = kilometer,
                                           breaks = c(0, 50000, 100000, 150000),
                                           labels = c('km<50000', '50000>km<100000', 'km>100000'))]
 
-# Alternative dataset; Minimal (removing samples with empty values and unused features)
-datasetCarsMinimal <- datasetCars[!is.na(vehicleType) &
+# Power PS
+datasetCars[powerPS == max(powerPS)]
+datasetCars[powerPS == min(powerPS)]
+datasetCars <- datasetCars[powerPS > 0 & powerPS <= 500]
+
+# Recodification no repaired damage
+datasetCars[is.na(notRepairedDamage), notRepairedDamage := 'Not applicable']
+
+# We are not interested in auctions, only in direct sales
+datasetCars <- datasetCars[offerType != 'Gesuch']
+# We want only privat sellers
+datasetCars <- datasetCars[seller == 'privat']
+
+# Minimal dataset (removing samples with empty values and unused features)
+datasetCarsFinal <- datasetCars[!is.na(vehicleType) &
                                     !is.na(gearbox) &
                                     !is.na(fuelType) &
                                     !is.na(brand) &
                                     !is.na(model) &
                                     !is.na(notRepairedDamage),
                                   c('price', 'vehicleType', 'yearOfRegistration',
-                                    'gearbox', 'powerPSLog','kilometerCategorical', 'fuelType',
-                                    'brand', 'notRepairedDamage')]
+                                    'gearbox', 'powerPS','kilometerCategorical', 
+                                    'fuelType', 'brand', 'model', 'notRepairedDamage',
+                                    'postalCode')]
 
-# Save dataset
+# Merge with postal Code Database ----------------------------------------------
+zipcodes <- fread(input = './data/zipcodes_de_completo.csv',
+                  select = c('zipcode', 'state', 'community'),
+                  colClasses = c(rep('character', 11)))
+zipcodes <- zipcodes[!duplicated(zipcodes)]
+colnames(zipcodes)[1] <- 'postalCode'
+datasetCarsFinal <- zipcodes[datasetCarsFinal, on = 'postalCode']
+datasetCarsFinal <- datasetCarsFinal[!is.na(datasetCarsFinal$state),]
+# Save dataset -----------------------------------------------------------------
 save(datasetCars, file = './data/datasetCars')
-save(datasetCarsMinimal, file = './data/datasetCarsMinimal')
+save(datasetCarsFinal, file = './data/datasetCarsFinal')
 
-fwrite(datasetCarsMinimal, file = './data/autosMinimal.csv', row.names = F)
+fwrite(datasetCarsFinal, file = './data/autosFinal.csv', row.names = F)
 
 # Delete unused objects
 rm(list = ls())

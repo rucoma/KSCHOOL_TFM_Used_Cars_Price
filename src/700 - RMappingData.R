@@ -37,7 +37,7 @@ gemeinen <- readOGR(dsn = '../GermanyShapefile/', layer = 'VG250_Gemeinden', enc
 Verwaltungsgemeinschaften <- readOGR(dsn = '../GermanyShapefile/', layer = 'VG250_Verwaltungsgemeinschaften', encoding = 'ISO-8859-15')
 
 map <- ggplot() +
-  geom_path(data = kreise,
+  geom_path(data = lander,
             mapping = aes(x = long, y = lat, group = group),
             color = 'gray',
             size = .1) +

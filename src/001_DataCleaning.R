@@ -167,7 +167,7 @@ datasetCarsFinal <- datasetCars[!is.na(vehicleType) &
                                   c('price', 'vehicleType', 'yearOfRegistration',
                                     'gearbox', 'powerPS','kilometerCategorical', 
                                     'fuelType', 'brand', 'model', 'notRepairedDamage',
-                                    'postalCode')]
+                                    'postalCode', 'kilometer')]
 
 # Merge with postal Code Database ----------------------------------------------
 zipcodes <- fread(input = './data/zipcodes_de_completo.csv',

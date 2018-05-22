@@ -15,48 +15,48 @@ library(caret)
 library(corrplot)
 
 # Load dataset
-load(file = './data/datasetCarsMinimal')
+load(file = './data/datasetCarsFinal')
 
 # Check correlation between variables
 par(mfrow = c(1, 1))
-corrplot::corrplot(cor(datasetCarsMinimal[, c('price', 'yearOfRegistration', 'powerPSLog')]), 
+corrplot::corrplot(cor(datasetCarsFinal[, c('price', 'yearOfRegistration', 'powerPS', 'kilometer')]), 
                    method = 'number', 
                    type = 'lower')
 
 # Plot variables against price
-# plot(datasetCarsMinimal$yearOfRegistration, datasetCarsMinimal$price)
+# plot(datasetCarsFinal$yearOfRegistration, datasetCarsFinal$price)
 # Year of registration doesn't seem to be a valid variable to predict price
-# plot(datasetCarsMinimal$kilometer, datasetCarsMinimal$price)
+# plot(datasetCarsFinal$kilometer, datasetCarsFinal$price)
 
 ## Some feature engineering ----------------------------------------------------
 # Scalate variables
-# datasetCarsMinimal[, `:=` (priceScalated = scale(price),
+# datasetCarsFinal[, `:=` (priceScalated = scale(price),
 #                     kilometerScaled = scale(kilometer),
 #                     yearOfRegistrationScalated = scale(yearOfRegistration))]
 
 # Split dataset in train and test
 set.seed(42)
-index <- createDataPartition(y = datasetCarsMinimal$price, p = 0.8, list = F)
-train <- datasetCarsMinimal[index,]
-test <- datasetCarsMinimal[-index,]
+index <- createDataPartition(y = datasetCarsFinal$price, p = 0.8, list = F)
+train <- datasetCarsFinal[index,]
+test <- datasetCarsFinal[-index,]
 
 # Regression with R stats ------------------------------------------------------
 # model <- lm(formula = price ~ yearOfRegistration, data = train)
 # summary(model)
 # 
-# plot(datasetCarsMinimal$yearOfRegistration, datasetCarsMinimal$price)
+# plot(datasetCarsFinal$yearOfRegistration, datasetCarsFinal$price)
 # abline(model, col = 'red')
 
 # Some feature engineering
-# datasetCarsMinimal[, yearSqrt := sqrt(yearOfRegistration)]
-# index <- createDataPartition(y = datasetCarsMinimal$price, p = 0.8, list = F)
-# train <- datasetCarsMinimal[index,]
-# test <- datasetCarsMinimal[-index,]
+# datasetCarsFinal[, yearSqrt := sqrt(yearOfRegistration)]
+# index <- createDataPartition(y = datasetCarsFinal$price, p = 0.8, list = F)
+# train <- datasetCarsFinal[index,]
+# test <- datasetCarsFinal[-index,]
 # # Did not work!!
 # 
 # model2 <- lm(formula = price ~ yearSqrt, data = train)
 # summary(model2)
-# plot(datasetCarsMinimal$yearSqrt, datasetCarsMinimal$price)
+# plot(datasetCarsFinal$yearSqrt, datasetCarsFinal$price)
 # abline(model2, col = 'red')
 # plot(model)
 
@@ -64,7 +64,7 @@ test <- datasetCarsMinimal[-index,]
 # https://www.analyticsvidhya.com/blog/2014/12/caret-package-stop-solution-building-predictive-models/
 set.seed(42)
 # Linear regression
-modelLM <- train(price ~ yearOfRegistration + powerPSLog, data = train, method = 'lm')
+modelLM <- train(price ~ yearOfRegistration + powerPS + kilometer, data = train, method = 'lm')
 # modelLM <- train(priceScalated ~ yearOfRegistrationScalated, data = train, method = 'lm') # No mejora la prediccion con las variables escaladas
 # modelLM <- train(priceScalated ~ yearOfRegistrationScalated + kilometerScaled, data = train, method = 'lm') # Anyadiendo los kilometros mejora algo
 # modelLM <- train(price ~ yearOfRegistration, data = trainMinimal, method = 'lm')
@@ -79,7 +79,7 @@ RMSE(pred = predictLM, train$price, na.rm = T)
 
 # Cross Validation
 ctrl <- trainControl(method = 'cv', number = 10)
-modelLMCV <- train(price ~ yearOfRegistration, 
+modelLMCV <- train(price ~ yearOfRegistration + powerPS + kilometer, 
                    data = train, 
                    method = 'lm', 
                    trControl = ctrl, 

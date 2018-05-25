@@ -42,3 +42,6 @@ vignettes/*.pdf
 
 # Files in project folder
 shapefileCPlemania.csv
+
+# Other files
+randomForestQuestion.txt

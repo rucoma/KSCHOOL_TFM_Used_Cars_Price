@@ -2,6 +2,8 @@
 """
 Random Forest with python
 2018-04-29
+
+Este script nos da un resultado de 0.9 en train y 0.83 en test
 """
 
 import pandas as pd
@@ -12,12 +14,12 @@ from sklearn.model_selection import train_test_split, KFold, GridSearchCV
 from sklearn import tree
 import graphviz
 
-# Read CSV minimal
+# Read CSV final
 datasetCarsFinal = pd.read_csv('./data/autosFinal.csv')
 print(datasetCarsFinal.shape)
 print(datasetCarsFinal.head())
 
-# Create train and test
+# Create train and test indexes
 np.random.seed(42)
 train, test = train_test_split(datasetCarsFinal.index, test_size = 0.2)
 
@@ -38,6 +40,8 @@ regr.feature_importances_
 
 treeData = tree.export_graphviz(regr, out_file=None)
 graph = graphviz.Source(treeData)
+
+# No ejecutar
 # graph
 
 regr.score(features.loc[train], datasetCarsFinal.price[train])
@@ -54,6 +58,7 @@ paramGrid = {
         'max_depth': list(range(1, 12 + 1)),
         'splitter': ['best', 'random']}
 
+# Tarda un poco
 cv = GridSearchCV(
         tree.DecisionTreeRegressor(),
         param_grid = paramGrid,

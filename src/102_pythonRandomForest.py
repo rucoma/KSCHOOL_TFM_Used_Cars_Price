@@ -17,10 +17,44 @@ from sklearn import metrics
 import warnings
 warnings.simplefilter('ignore')
 
+# read csv files
+datasetCarsFinal = pd.read_csv('./data/autosFinal.csv',
+                               usecols=['brand', 
+                                      'model', 
+                                      'vehicleType', 
+                                      'gearbox', 
+                                      'yearOfRegistration',
+                                      'fuelType',
+                                      'powerPS',
+                                      #'kilometer',
+                                      'kilometerCategorical',
+                                      #'kilometer000',
+                                      'notRepairedDamage',
+                                      'postalCode',
+                                      'state',
+                                      'community',
+                                      'price'],
+                               dtype={'brand': 'str', 
+                                      'model': 'str', 
+                                      'vehicleType': 'str', 
+                                      'gearbox': 'str', 
+                                      'yearOfRegistration': np.int64,
+                                      'fuelType': 'str',
+                                      'powerPS': np.int64,
+                                      #'kilometer': np.int64,
+                                      'kilometerCategorical': 'str',
+                                      #'kilometer000': np.int64,
+                                      'notRepairedDamage': 'str',
+                                      'postalCode': 'str',
+                                      'state': 'str',
+                                      'community':'str',
+                                      'price': np.int64})
+
 # Creation of features dataset
 featuresDatasetCars = datasetCarsFinal.copy()
 featuresDatasetCars = featuresDatasetCars.drop('price', axis=1)
 
+## Aqui tendriamos que aplicar la metodología de MJosé
 # Get dummies
 featuresDatasetCarsDummies = pd.get_dummies(featuresDatasetCars)
 
@@ -30,7 +64,7 @@ train, test = train_test_split(featuresDatasetCarsDummies.index, test_size=.2)
 
 
 
-# Random Forst Regressor 
+# Random Forst Regressor (tarda 1 hora)
 regr = ensemble.RandomForestRegressor().fit(featuresDatasetCarsDummies.loc[train],
                                      datasetCarsFinal.price[train])
 
@@ -39,7 +73,10 @@ regr.score(featuresDatasetCarsDummies.loc[train], datasetCarsFinal.price[train])
 regr.score(featuresDatasetCarsDummies.loc[test], datasetCarsFinal.price[test])
 
 # Predictions
-pred = pd.Series(regr.predict(featuresDatasetCarsDummies), index=datasetCarsFinal.index)
+
+pred_train = pd.Series(regr.predict(featuresDatasetCarsDummies.loc[train]))
+
+pred_test = pd.Series(regr.predict(featuresDatasetCarsDummies.loc[test]), index=datasetCarsFinal.index)
 
 # Fine tuning of parameters
 paramGrid = {

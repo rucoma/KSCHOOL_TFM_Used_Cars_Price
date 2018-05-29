@@ -16,6 +16,7 @@ from sklearn.model_selection import train_test_split, KFold
 from sklearn import metrics
 import warnings
 warnings.simplefilter('ignore')
+from sklearn.externals import joblib
 
 # read csv files
 datasetCarsFinal = pd.read_csv('./data/autosFinal.csv',
@@ -66,7 +67,11 @@ train, test = train_test_split(featuresDatasetCarsDummies.index, test_size=.2)
 
 # Random Forst Regressor (tarda 1 hora)
 regr = ensemble.RandomForestRegressor().fit(featuresDatasetCarsDummies.loc[train],
-                                     datasetCarsFinal.price[train])
+                                     datasetCarsFinal.price[train],
+                                     n_jobs=-1)
+
+# Saving the model
+joblib.dump(regr, filename='./output/102_RandomForest.pkl')
 
 # Scores
 regr.score(featuresDatasetCarsDummies.loc[train], datasetCarsFinal.price[train])
@@ -89,6 +94,7 @@ scores = {}
 for max_depth in paramGrid['max_depth']:
     print(max_depth)
     for max_features in paramGrid['max_features']:
+        print(max_features)
         rf = ensemble.RandomForestRegressor(
                 max_depth=max_depth,
                 max_features=max_features,
@@ -96,6 +102,7 @@ for max_depth in paramGrid['max_depth']:
                 warm_start=True
                 )
         for n_estimators in paramGrid['n_estimators']:
+            print(n_estimators)
             rf.n_estimators = n_estimators
             scores[(max_depth, max_features, n_estimators)] = rf.fit(featuresDatasetCarsDummies, datasetCarsFinal.price).oob_score_
             

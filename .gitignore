@@ -40,6 +40,9 @@ vignettes/*.pdf
 /data/datasetCars
 /data/datasetCarsMinimal
 
+# Output files
+/output/102_RandomForest.pkl
+
 # Files in project folder
 shapefileCPlemania.csv
 

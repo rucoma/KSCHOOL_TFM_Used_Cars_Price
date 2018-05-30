@@ -31,9 +31,9 @@ datasetCarsFinal = pd.read_csv('./data/autosFinal.csv',
                                       'kilometerCategorical',
                                       #'kilometer000',
                                       'notRepairedDamage',
-                                      'postalCode',
+                                      #'postalCode',
                                       'state',
-                                      'community',
+                                      #'community',
                                       'price'],
                                dtype={'brand': 'str', 
                                       'model': 'str', 
@@ -46,9 +46,9 @@ datasetCarsFinal = pd.read_csv('./data/autosFinal.csv',
                                       'kilometerCategorical': 'str',
                                       #'kilometer000': np.int64,
                                       'notRepairedDamage': 'str',
-                                      'postalCode': 'str',
+                                      #'postalCode': 'str',
                                       'state': 'str',
-                                      'community':'str',
+                                      #'community':'str',
                                       'price': np.int64})
 
 # Creation of features dataset
@@ -63,25 +63,44 @@ featuresDatasetCarsDummies = pd.get_dummies(featuresDatasetCars)
 np.random.seed(42)
 train, test = train_test_split(featuresDatasetCarsDummies.index, test_size=.2)
 
+# Crear los datasets
+X_train = featuresDatasetCarsDummies.loc[train]
+y_train = datasetCarsFinal.loc[train]['price']
+
+X_test = featuresDatasetCarsDummies.loc[test]
+y_test = datasetCarsFinal.loc[test]['price']
+
 
 
 # Random Forst Regressor (tarda 1 hora)
-regr = ensemble.RandomForestRegressor().fit(featuresDatasetCarsDummies.loc[train],
-                                     datasetCarsFinal.price[train],
-                                     n_jobs=-1)
+regr = ensemble.RandomForestRegressor(n_jobs=-1,
+                                     verbose=1).fit(X_train,
+                                              y_train)
 
 # Saving the model
 joblib.dump(regr, filename='./output/102_RandomForest.pkl')
 
 # Scores
-regr.score(featuresDatasetCarsDummies.loc[train], datasetCarsFinal.price[train])
-regr.score(featuresDatasetCarsDummies.loc[test], datasetCarsFinal.price[test])
+regr.score(X_train, y_train)
+regr.score(X_test, y_test)
 
 # Predictions
+pred_train = pd.Series(regr.predict(X_train))
+pred_test = pd.Series(regr.predict(X_test))
 
-pred_train = pd.Series(regr.predict(featuresDatasetCarsDummies.loc[train]))
+# Visualization
+plt.scatter(y_train, pred_train, alpha=.2)
+plt.plot([200, 200000], [200, 200000], color='red')
+plt.title('Train data')
+plt.xlabel('Real price')
+plt.ylabel('Predicted price')
 
-pred_test = pd.Series(regr.predict(featuresDatasetCarsDummies.loc[test]), index=datasetCarsFinal.index)
+plt.scatter(y_test, pred_test, alpha=.2)
+plt.plot([200, 200000], [200, 200000], color='red')
+plt.title('Test data')
+plt.xlabel('Real price')
+plt.ylabel('Predicted price')
+
 
 # Fine tuning of parameters
 paramGrid = {
@@ -99,12 +118,14 @@ for max_depth in paramGrid['max_depth']:
                 max_depth=max_depth,
                 max_features=max_features,
                 oob_score=True,
-                warm_start=True
+                warm_start=True,
+                n_jobs=-1,
+                verbose=1
                 )
         for n_estimators in paramGrid['n_estimators']:
             print(n_estimators)
             rf.n_estimators = n_estimators
-            scores[(max_depth, max_features, n_estimators)] = rf.fit(featuresDatasetCarsDummies, datasetCarsFinal.price).oob_score_
+            scores[(max_depth, max_features, n_estimators)] = rf.fit(X_train, y_train).oob_score_
             
 # Getting the maximum score
 pd.Series(scores).sort_values(ascending=False).head(10)

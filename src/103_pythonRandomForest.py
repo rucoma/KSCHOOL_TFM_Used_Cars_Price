@@ -90,14 +90,14 @@ print(gsCV.best_score_)
 print(gsCV.best_params_)
 
 # Prediccion para test
-prediction = gsCV.predict(X_test)
+pred_test = gsCV.predict(X_test)
 
 # Gráfico
-plt.plot(Y_test, prediction, 'o', alpha=0.1)
+plt.plot(Y_test, pred_test, 'o', alpha=0.1)
 plt.plot([1, 200000], [1, 200000])
 
 ensemble_clfs = [("RandomForestRegressor, max_depth='20', min_samples_split='3', min_samples_leaf='1'",
-                  RandomForestRegressor(warm_start=True, max_features=4, max_depth=20, min_samples_split=3, min_samples_leaf=1,oob_score=True))]
+                  RandomForestRegressor(warm_start=True, max_features=4, max_depth=20, min_samples_split=3, min_samples_leaf=1, oob_score=True))]
     
 error_rate = OrderedDict((label, []) for label, _ in ensemble_clfs)
 min_estimators = 30

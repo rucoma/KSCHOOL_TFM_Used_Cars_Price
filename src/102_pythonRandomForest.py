@@ -72,7 +72,7 @@ y_test = datasetCarsFinal.loc[test]['price']
 
 
 
-# Random Forst Regressor (tarda 1 hora)
+# Random Forst Regressor
 regr = ensemble.RandomForestRegressor(n_jobs=-1,
                                      verbose=1).fit(X_train,
                                               y_train)
@@ -131,5 +131,25 @@ for max_depth in paramGrid['max_depth']:
 pd.Series(scores).sort_values(ascending=False).head(10)
 max(scores, key=scores.get), max(scores.values())
 
-# Confusion matrix
-metrics.confusion_matrix(datasetCarsFinal.price[test], pred[test])
+
+
+# Random Forst Regressor final model
+regr = ensemble.RandomForestRegressor(n_jobs=-1,
+                                     verbose=1,
+                                     n_estimators=100,
+                                     max_depth=10,
+                                     max_features=None).fit(X_train,
+                                                      y_train)
+
+# Scores
+regr.score(X_train, y_train)
+regr.score(X_test, y_test)
+
+# Predictions
+pred_train = pd.Series(regr.predict(X_train))
+pred_test = pd.Series(regr.predict(X_test))
+
+
+
+# Saving the final model
+joblib.dump(regr, filename='./output/102_RandomForestFinal.pkl')

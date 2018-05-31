@@ -42,6 +42,7 @@ vignettes/*.pdf
 
 # Output files
 /output/102_RandomForest.pkl
+/output/102_RandomForestFinal.pkl
 
 # Files in project folder
 shapefileCPlemania.csv

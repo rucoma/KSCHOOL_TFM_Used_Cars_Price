@@ -9,6 +9,7 @@ https://www.kaggle.com/milosev/randomforestregressor-test-0-93/notebook
 """
 
 import pandas as pd
+pd.set_option("max_columns", 50)
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats

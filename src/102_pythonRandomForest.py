@@ -8,6 +8,7 @@ Created on Tue May  1 19:46:36 2018
 
 # Import modules
 import pandas as pd
+pd.set_option("max_columns", 50)
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import tree

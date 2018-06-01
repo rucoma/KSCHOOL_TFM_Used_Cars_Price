@@ -4,6 +4,8 @@
 Created on Mon May  7 23:28:03 2018
 
 @author: rucoma
+
+https://www.kaggle.com/milosev/randomforestregressor-test-0-93/notebook
 """
 
 import pandas as pd
@@ -15,6 +17,7 @@ from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.datasets import make_classification
 from collections import OrderedDict
+from sklearn.externals import joblib
 
 
 # read csv files
@@ -103,6 +106,7 @@ error_rate = OrderedDict((label, []) for label, _ in ensemble_clfs)
 min_estimators = 30
 max_estimators = 1000
 
+# Tarda unos 20 minutos
 for label, clf in ensemble_clfs:
     print(label, clf)
     for i in range(min_estimators, max_estimators + 1, 50):
@@ -154,12 +158,14 @@ model.score(X_test, y_test)
 
 y_pred = model.predict(X_test)
 
+# Saving the model
+joblib.dump(model, filename='./output/103_RandomForest.pkl')
+
 plt.figure(figsize=(6, 4))
 plt.scatter(y_test, y_pred, s=20,alpha=0.1)
 plt.title('Estimated Price vs. Real Price')
 plt.xlabel('Real Price')
 plt.ylabel('Predicted Price')
-
 plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], 'y')
 plt.tight_layout()
 

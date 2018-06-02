@@ -17,7 +17,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.datasets import make_classification
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from sklearn.externals import joblib
 
 
@@ -25,6 +25,7 @@ from sklearn.externals import joblib
 datasetCarsFinal = pd.read_csv('./data/autosFinal.csv',
                                usecols=['brand', 
                                       'model', 
+                                      'brandModel',
                                       'vehicleType', 
                                       'gearbox', 
                                       'yearOfRegistration',
@@ -40,6 +41,7 @@ datasetCarsFinal = pd.read_csv('./data/autosFinal.csv',
                                       'price'],
                                dtype={'brand': 'str', 
                                       'model': 'str', 
+                                      'brandModel': 'str', 
                                       'vehicleType': 'str', 
                                       'gearbox': 'str', 
                                       'yearOfRegistration': np.int64,

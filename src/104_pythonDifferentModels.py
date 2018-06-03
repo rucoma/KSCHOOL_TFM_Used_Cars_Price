@@ -228,7 +228,7 @@ paramsRF = {
         'min_samples_leaf':[1,2,3]
         }
 
-# Tarda ()
+# Tarda (más de 5 horas)
 cvRF = GridSearchCV(
         estimator=RandomForestRegressor(oob_score=True),
         param_grid=paramsRF,

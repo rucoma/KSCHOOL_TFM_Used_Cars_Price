@@ -23,8 +23,9 @@ from sklearn.externals import joblib
 
 # read csv files
 datasetCarsFinal = pd.read_csv('./data/autosFinal.csv',
-                               usecols=['brand', 
-                                      'model', 
+                               usecols=[
+                                      #'brand', 
+                                      #'model', 
                                       'brandModel',
                                       'vehicleType', 
                                       'gearbox', 
@@ -38,9 +39,11 @@ datasetCarsFinal = pd.read_csv('./data/autosFinal.csv',
                                       #'postalCode',
                                       'state',
                                       #'community',
-                                      'price'],
-                               dtype={'brand': 'str', 
-                                      'model': 'str', 
+                                      'price'
+                                      ],
+                               dtype={
+                                      #'brand': 'str', 
+                                      #'model': 'str', 
                                       'brandModel': 'str', 
                                       'vehicleType': 'str', 
                                       'gearbox': 'str', 
@@ -54,7 +57,8 @@ datasetCarsFinal = pd.read_csv('./data/autosFinal.csv',
                                       #'postalCode': 'str',
                                       'state': 'str',
                                       #'community':'str',
-                                      'price': np.int64})
+                                      'price': np.int64
+                                      })
 datasetCarsFinal.columns
 datasetCarsFinal.head()
 

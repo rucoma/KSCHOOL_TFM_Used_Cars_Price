@@ -156,6 +156,8 @@ datasetCars[is.na(notRepairedDamage), notRepairedDamage := 'Not applicable']
 datasetCars <- datasetCars[offerType != 'Gesuch']
 # We want only privat sellers
 datasetCars <- datasetCars[seller == 'privat']
+# Removing model 'andere' = 'other'
+datasetCars <- datasetCars[model != 'andere']
 
 # Minimal dataset (removing samples with empty values and unused features)
 datasetCarsFinal <- datasetCars[!is.na(vehicleType) &

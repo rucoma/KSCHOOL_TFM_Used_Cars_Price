@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Random Forest with python
+Decision trees with python
 2018-04-29
 
 Este script nos da un resultado de 0.9 en train y 0.83 en test
@@ -24,7 +24,7 @@ np.random.seed(42)
 train, test = train_test_split(datasetCarsFinal.index, test_size = 0.2)
 
 '''
-Decission trees
+Decision trees
 '''
 
 # Creation of features matrix and dummy variables

@@ -44,6 +44,7 @@ vignettes/*.pdf
 /output/102_RandomForest.pkl
 /output/102_RandomForestFinal.pkl
 /output/103_RandomForest.pkl
+/output/bestDecisiontree.pkl
 
 # Files in project folder
 shapefileCPlemania.csv

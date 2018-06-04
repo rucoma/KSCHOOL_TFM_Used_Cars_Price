@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 from sklearn import tree
+from sklearn import neighbors
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.preprocessing import LabelEncoder
@@ -220,10 +221,18 @@ regrRF.score(X_train, y_train) #0.9713
 regrRF.score(X_test, y_test)   #0.8878
 
 # Params optimization (revisar)
+#paramsRF = {
+#        'n_estimators': [10, 20, 50, 100],
+#        'max_features': [2,4,8, 'auto', None],
+#        'max_depth': list(range(3, 10 + 1)),
+#        'min_samples_split': [2,3,4],
+#        'min_samples_leaf':[1,2,3]
+#        }
+
 paramsRF = {
-        'n_estimators': [10, 20, 50, 100],
-        'max_features': [2,4,8, 'auto', None],
-        'max_depth': list(range(3, 10 + 1)),
+        'n_estimators': [200],
+        'max_features': [None],
+        'max_depth': list(range(1, 10 + 1)),
         'min_samples_split': [2,3,4],
         'min_samples_leaf':[1,2,3]
         }
@@ -237,9 +246,19 @@ cvRF = GridSearchCV(
         verbose=1,
         return_train_score=True).fit(X_train, y_train)
 
-print(cvRF.best_score_)
+print(cvRF.best_score_) 
 print(cvRF.best_params_)
 
 '''
 K-nearest Neighbors
 '''
+
+#First try
+regrKNN = neighbors.KneghborsRegressor(n_neighbors=5, 
+                                       weights='distance',
+                                       algorithm='auto',
+                                       n_jobs=-1).fit(X_train, y_train)
+regrKNN.score(X_train, y_train)
+regrKNN.score(X_test, y_test)
+
+# Cross Validation

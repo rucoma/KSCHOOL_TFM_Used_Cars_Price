@@ -219,7 +219,7 @@ regrRF = RandomForestRegressor(n_jobs=-1,
 regrRF.score(X_train, y_train) #0.9713
 regrRF.score(X_test, y_test)   #0.8878
 
-# Params optimization
+# Params optimization (revisar)
 paramsRF = {
         'n_estimators': [10, 20, 50, 100],
         'max_features': [2,4,8, 'auto', None],

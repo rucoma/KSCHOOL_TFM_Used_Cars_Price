@@ -182,6 +182,11 @@ zipcodes <- zipcodes[!duplicated(zipcodes)]
 colnames(zipcodes)[1] <- 'postalCode'
 datasetCarsFinal <- zipcodes[datasetCarsFinal, on = 'postalCode']
 datasetCarsFinal <- datasetCarsFinal[!is.na(datasetCarsFinal$state),]
+
+# Pretty Names -----------------------------------------------------------------
+datasetCarsFinal[, `:=` (brand = toupper(brand),
+                         model = toupper(model))]
+datasetCarsFinal[, `:=` (brand = gsub(pattern = '_', replacement = ' ', x = brand))]
 # Save dataset -----------------------------------------------------------------
 save(datasetCars, file = './data/datasetCars')
 save(datasetCarsFinal, file = './data/datasetCarsFinal')

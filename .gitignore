@@ -45,6 +45,14 @@ vignettes/*.pdf
 /output/102_RandomForestFinal.pkl
 /output/103_RandomForest.pkl
 /output/bestDecisiontree.pkl
+/output/TFM_Used_Cars_Price_Dashboard.twb
+
+# Source files
+/src/'Data exploration and cleaning.ipynb'
+/src/'Data exploration and cleaning.nb.html'
+/src/'Data exploration and cleaning.Rmd'
+/src/.ipynb_checkpoints
+
 
 # Files in project folder
 shapefileCPlemania.csv

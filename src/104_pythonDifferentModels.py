@@ -89,6 +89,12 @@ X_test.shape, y_test.shape
 Decission Trees
 '''
 
+# First try
+regrDT = tree.DecisionTreeRegressor().fit(X_train, y_train)
+
+regrDT.score(X_train, y_train) #0.9877
+regrDT.score(X_test, y_test)   #0.8357
+
 # parameters
 paramGridDT = {
         'criterion': ['mse'],
@@ -254,11 +260,29 @@ K-nearest Neighbors
 '''
 
 #First try
-regrKNN = neighbors.KneghborsRegressor(n_neighbors=5, 
+regrKNN = neighbors.KNeighborsRegressor(n_neighbors=5, 
                                        weights='distance',
                                        algorithm='auto',
                                        n_jobs=-1).fit(X_train, y_train)
-regrKNN.score(X_train, y_train)
-regrKNN.score(X_test, y_test)
+
+regrKNN.score(X_train, y_train) #0.9874
+regrKNN.score(X_test, y_test)   #0.8675
 
 # Cross Validation
+paramsKNN = {
+        'n_neighbors': [5, 10, 20],
+        'weights': ['distance', 'uniform'],
+        'algorithm': ['auto'],
+        'leaf_size': [2,3,4],
+        }
+
+cvKNN = GridSearchCV(
+        estimator=neighbors.KNeighborsRegressor(),
+        param_grid=paramsKNN,
+        n_jobs=-1,
+        cv=10,
+        verbose=1,
+        return_train_score=True).fit(X_train, y_train)
+
+print(cvKNN.best_score_) 
+print(cvKNN.best_params_)

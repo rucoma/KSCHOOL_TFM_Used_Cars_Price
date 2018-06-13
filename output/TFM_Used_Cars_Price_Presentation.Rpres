@@ -1,0 +1,58 @@
+TFM: Used Cars Price Prediction
+========================================================
+author: Rubén Coca
+date: June 15th, 2018
+autosize: true
+
+Introduction
+========================================================
+
+The main objective of the project is to create a prediction model for the price of used cars in a internet portal.  
+
+The data has been downloaded from <https://www.kaggle.com>, and originally comes from <https://www.ebay.de>.
+
+<center>
+![car](../data/used_cars.jpg)
+</center>
+
+The dataset (I)
+========================================================
+
+Original dataset will be composed of:  
+```{r, echo=FALSE, message=FALSE, warnings=FALSE, size = 'tiny'}
+load('../data/datasetCars')
+load('../data/sampleData')
+print(paste(dim(datasetCars)[1], 'samples and', dim(datasetCars)[2], 'features.'))
+```
+
+Features like brand, model, type of vehicle, type of fuel, number of kilometers, age, power or location will help to create a prediction model.  
+
+
+The dataset (II)
+========================================================
+
+And this is the type of the features:  
+```{r, echo=FALSE, message=FALSE, warnings=FALSE, size = 'tiny'}
+# str(datasetCars)
+head(sampleData, 2)
+```
+
+
+The target
+========================================================
+
+Price will be the target variable
+```{r, echo=FALSE}
+# plot(datasetCars$)
+```
+
+
+Methodology
+========================================================
+
+
+The repository
+========================================================
+
+All the code and necessary data is available at this GitHub repository:  
+<https://github.com/rucoma/KSCHOOL_TFM_Used_Cars_Price>

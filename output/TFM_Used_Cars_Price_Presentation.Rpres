@@ -3,11 +3,14 @@ TFM: Used Cars Price Prediction
 author: Rubén Coca
 date: June 15th, 2018
 autosize: true
+css: slides.css
 
 Introduction
 ========================================================
 
 The main objective of the project is to create a prediction model for the price of used cars in a internet portal.  
+
+This model would help portal users to set the best price to sell their vehicles.  
 
 The data has been downloaded from <https://www.kaggle.com>, and originally comes from <https://www.ebay.de>.
 
@@ -15,40 +18,48 @@ The data has been downloaded from <https://www.kaggle.com>, and originally comes
 ![car](../data/used_cars.jpg)
 </center>
 
-The dataset (I)
+The dataset
 ========================================================
 
 Original dataset will be composed of:  
 ```{r, echo=FALSE, message=FALSE, warnings=FALSE, size = 'tiny'}
 load('../data/datasetCars')
+load('../data/datasetCarsFinal')
 load('../data/sampleData')
 print(paste(dim(datasetCars)[1], 'samples and', dim(datasetCars)[2], 'features.'))
 ```
 
-Features like brand, model, type of vehicle, type of fuel, number of kilometers, age, power or location will help to create a prediction model.  
+Features like **brand**, **model**, **type of vehicle**, **type of fuel**, number of **kilometers**, **age**, **power** or **location** will help to create a prediction model.  
 
-
-The dataset (II)
-========================================================
-
-And this is the type of the features:  
-```{r, echo=FALSE, message=FALSE, warnings=FALSE, size = 'tiny'}
-# str(datasetCars)
-head(sampleData, 2)
-```
-
+<center>
+![cars](../data/toy_cars.jpg)
+</center>
 
 The target
 ========================================================
 
-Price will be the target variable
-```{r, echo=FALSE}
-# plot(datasetCars$)
+**Price** is the target variable. Will be able to predict it?
+
+<center>
+```{r, echo=FALSE, message=FALSE, warnings=FALSE}
+library(tidyverse)
+ggplot(datasetCarsFinal, aes(x = yearOfRegistration, y = price, col = brand)) +
+  geom_point()
 ```
+</center>
 
 
-Methodology
+The project
 ========================================================
+
+* **Data cleaning and exploration:** We will use **R** to manipulate data and prepae the datase for modelization.  
+
+* **Modelization:** Using **python** we will implement different regressors in order to get the best estimation of the price. Used algorithms will be:  
+  * *Lineal regression*  
+  * *Decission trees*  
+  * *Random forests*  
+  
+* **Output:** Using [Flask](http://flask.pocoo.org/) we will create an interface that allows users to introduce the features of their car and they will receive the estimated price.  
 
 
 The repository
@@ -56,3 +67,16 @@ The repository
 
 All the code and necessary data is available at this GitHub repository:  
 <https://github.com/rucoma/KSCHOOL_TFM_Used_Cars_Price>
+
+<center>
+![cars](../data/25231.svg)
+</center>
+
+Thank you!
+========================================================
+autosize: true
+type: exclaim
+
+<center>
+![cars](../data/compramostucoche.jpg)
+</center>

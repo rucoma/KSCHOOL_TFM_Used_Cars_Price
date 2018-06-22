@@ -1,4 +1,4 @@
-TFM: Used Cars Price Prediction
+TFM: Used cars price prediction
 ========================================================
 author: Rubén Coca
 date: June 15th, 2018

@@ -187,6 +187,11 @@ datasetCarsFinal <- datasetCarsFinal[!is.na(datasetCarsFinal$state),]
 datasetCarsFinal[, `:=` (brand = toupper(brand),
                          model = toupper(model))]
 datasetCarsFinal[, `:=` (brand = gsub(pattern = '_', replacement = ' ', x = brand))]
+
+# Convert to factor ------------------------------------------------------------
+charToFactor <- c('postalCode', 'state', 'community', 'brand', 'model', 'brandModel')
+datasetCarsFinal[, (charToFactor) := lapply(.SD, as.factor), .SDcols = charToFactor]
+
 # Save dataset -----------------------------------------------------------------
 save(datasetCars, file = './data/datasetCars')
 save(datasetCarsFinal, file = './data/datasetCarsFinal')

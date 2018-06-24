@@ -72,9 +72,11 @@ d = defaultdict(LabelEncoder)
 categorical_encoded = categorical.apply(lambda x: d[x.name].fit_transform(x))
 datasetCarsFinalConcat = pd.concat([categorical_encoded, numerical], axis=1)
 
+joblib.dump(d, './output/carsLabelEncoder.pkl')
+
 # Create train and test
 np.random.seed(42)
-train, test = train_test_split(datasetCarsFinal.index, test_size = 0.2)
+train, test = train_test_split(datasetCarsFinalConcat.index, test_size = 0.2)
 
 X_train = datasetCarsFinalConcat.loc[train]
 y_train = target.loc[train]
@@ -114,7 +116,10 @@ cvDT = GridSearchCV(
         refit=False,
         verbose=1,
         return_train_score=True).fit(X_train, y_train)
-
+'''
+Esto no hace falta
+'''
+'''
 # Evaluating the trees
 def evaluate_tree(cv):
     if cv.scoring is None:
@@ -174,13 +179,17 @@ evaluation.head()
 
 # So the best model has this params
 evaluation[evaluation['rank'] == 1]
+'''
 
-bestDecisionTree = tree.DecisionTreeRegressor(criterion='mse',
-                                              max_depth=15,
-                                              max_features='auto',
-                                              min_samples_leaf=1,
-                                              min_samples_split=5,
-                                              splitter='best').fit(X_train, y_train)
+cvDT.best_params_
+cvDT.best_score_
+
+bestDecisionTree = tree.DecisionTreeRegressor(criterion=cvDT.best_params_['criterion'],
+                                              max_depth=cvDT.best_params_['max_depth'],
+                                              max_features=cvDT.best_params_['max_features'],
+                                              min_samples_leaf=cvDT.best_params_['min_samples_leaf'],
+                                              min_samples_split=cvDT.best_params_['min_samples_split'],
+                                              splitter=cvDT.best_params_['splitter']).fit(X_train, y_train)
 
 bestDecisionTree.score(X_train, y_train) #0.9401
 bestDecisionTree.score(X_test, y_test)   #0.8599

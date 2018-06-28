@@ -62,3 +62,13 @@ for (shapefile in shapefiles){
 
 shape <- readOGR(dsn = '../gadm36_DEU_shp/',
                  layer = 'gadm36_DEU_2')
+
+
+
+
+## Acquire datashape data ------------------------------------------------------
+# Download dataset from Dropbox
+download.file(url = 'https://www.dropbox.com/s/xuupzr8rfpeekyc/VG250_1Jan2011_WGS84.zip?dl=1',
+              destfile = './data/VG250_1Jan2011_WGS84.zip')
+unzip(zipfile = './data/VG250_1Jan2011_WGS84.zip', exdir = './data/Germany_shapefile/')
+shapefile <- readOGR('./data/Germany_shapefile/', layer = 'VG250_Bundeslaender', encoding = 'ISO-8859-15')

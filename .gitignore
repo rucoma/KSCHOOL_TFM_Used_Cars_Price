@@ -39,7 +39,8 @@ vignettes/*.pdf
 /data/autosMinimal.csv
 /data/datasetCars
 /data/datasetCarsMinimal
-/data/plz-gebiete.shp.zip
+/data/VG250_1Jan2011_WGS84.zip
+/data/Germany_shapefile/
 
 # Output files
 /output/102_RandomForest.pkl

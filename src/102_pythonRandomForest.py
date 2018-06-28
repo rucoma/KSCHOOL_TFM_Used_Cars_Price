@@ -79,7 +79,7 @@ y_test = datasetCarsFinal.loc[test]['price']
 
 
 
-# Random Forst Regressor
+# Random Forest Regressor
 regr = ensemble.RandomForestRegressor(n_jobs=-1,
                                      verbose=1).fit(X_train,
                                               y_train)

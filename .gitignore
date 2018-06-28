@@ -39,6 +39,7 @@ vignettes/*.pdf
 /data/autosMinimal.csv
 /data/datasetCars
 /data/datasetCarsMinimal
+/data/plz-gebiete.shp.zip
 
 # Output files
 /output/102_RandomForest.pkl

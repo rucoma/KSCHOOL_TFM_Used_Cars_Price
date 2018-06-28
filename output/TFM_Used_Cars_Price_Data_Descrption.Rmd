@@ -1,0 +1,61 @@
+---
+title: "TFM: Used Cars Price (Data description)"
+author: "Rubén Coca"
+date: "July 18th, 2018"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+```{r libraries, include=FALSE}
+# Required libraries
+
+### sudo apt-get install libudunits2-dev
+# system(command = 'ls')
+
+listPackages <- c('data.table', 'tidyverse', 'ggmap', 'kableExtra', 'plotly', 'scales', 'gridExtra', 'treemap', 'RColorBrewer', 'choroplethr', 'choroplethrMaps')
+newPackages <- listPackages[!(listPackages %in% installed.packages()[,'Package'])]
+if(length(newPackages)) install.packages(newPackages)
+
+rm(list = c('listPackages', 'newPackages'))
+
+library(data.table)
+library(tidyverse)
+library(ggmap)
+library(plotly)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+library(treemap)
+library(RColorBrewer)
+library(choroplethr)
+library(choroplethrMaps)
+```
+
+```{r data, include=FALSE, echo = FALSE, }
+load(file = '../data/datasetCarsFinal')
+head(datasetCarsFinal)
+```
+
+```{r functions, include=FALSE, echo = FALSE, }
+
+```
+
+```{r chartTheme, include=FALSE, echo = FALSE, }
+theme <- theme()
+```
+
+```{r}
+data(iris)
+head(iris)
+```
+
+```{r}
+
+```
+

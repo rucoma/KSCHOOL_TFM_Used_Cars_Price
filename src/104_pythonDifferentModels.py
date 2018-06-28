@@ -14,6 +14,7 @@ from scipy import stats
 from sklearn import tree
 from sklearn import neighbors
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.datasets import make_classification
@@ -244,9 +245,30 @@ regrRF.score(X_test, y_test)   #0.8878
 #        'min_samples_leaf':[1,2,3]
 #        }
 
+# Test the optimum number of estimators
+np.random.seed(123)
+scores = {}
+
+rf = None
+
+for max_features in [2,4,8, 'auto', None]:
+    if rf is None:
+        rf = RandomForestRegressor(n_estimators=50,
+                                   max_features=max_features)
+    else:
+        rf.warm_start = False
+        rf.max_features = max_features
+    
+    rf = rf.fit(X_train, y_train)
+    scores[max_features] = rf.score(X_test, y_test)
+
+pd.Series(scores).plot()
+plt.axhline(bestDecisionTree.score(X_test, y_test), linestyle='dashed', color='red')
+
+
 paramsRF = {
-        'n_estimators': [200],
-        'max_features': [None],
+        'n_estimators': [50],
+        'max_features': ['auto'],
         'max_depth': list(range(1, 10 + 1)),
         'min_samples_split': [2,3,4],
         'min_samples_leaf':[1,2,3]
@@ -262,7 +284,9 @@ cvRF = GridSearchCV(
         return_train_score=True).fit(X_train, y_train)
 
 print(cvRF.best_score_) 
-print(cvRF.best_params_)
+print(cvRF.best_params_) #{'max_depth': 10, 'max_features': 'auto', 'min_samples_leaf': 1, 'min_samples_split': 3, 'n_estimators': 50}
+
+# Desarrollar aquí el random Forests
 
 '''
 K-nearest Neighbors
@@ -294,4 +318,35 @@ cvKNN = GridSearchCV(
         return_train_score=True).fit(X_train, y_train)
 
 print(cvKNN.best_score_) 
-print(cvKNN.best_params_)
+print(cvKNN.best_params_) #{'algorithm': 'auto', 'leaf_size': 2, 'n_neighbors': 5, 'weights': 'distance'}
+
+
+'''
+Boosted
+'''
+
+# First try
+regrBoost = GradientBoostingRegressor().fit(X_train, y_train)
+
+regrBoost.score(X_train, y_train)
+regrBoost.score(X_test, y_test)
+
+# Fine tuning of parameters
+paramsBoost = {
+        'learning_rate': [0.001, 0.01, 0.1],
+        'n_estimators': [100, 200, 500],
+        'max_depth': [1, 3, 5],
+        'min_samples_split': [2],
+        'min_samples_leaf': [1],
+        'max_features': [None, 'auto']
+        }
+cvBoost = GridSearchCV(
+        estimator=GradientBoostingRegressor(),
+        param_grid=paramsBoost,
+        n_jobs=-1,
+        cv=10,
+        verbose=1,
+        return_train_score=True).fit(X_train, y_train)
+
+print(cvBoost.best_score_) #0.895675845311
+print(cvBoost.best_params_) #{'learning_rate': 0.1, 'max_depth': 5, 'max_features': 'auto', 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 500}

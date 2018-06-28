@@ -2,7 +2,7 @@
 ## 2018-04-23
 
 # Required libraries
-listPackages <- c('data.table', 'tidyverse', 'lubridate', 'funModeling', 'forcats')
+listPackages <- c('data.table', 'tidyverse', 'lubridate', 'funModeling', 'forcats', 'corrplot')
 newPackages <- listPackages[!(listPackages %in% installed.packages()[,'Package'])]
 if(length(newPackages)) install.packages(newPackages)
 
@@ -13,6 +13,7 @@ library(tidyverse)
 library(lubridate)
 library(funModeling)
 library(forcats)
+library(corrplot)
 
 ## Acquire data ----------------------------------------------------------------
 # Download dataset from Dropbox

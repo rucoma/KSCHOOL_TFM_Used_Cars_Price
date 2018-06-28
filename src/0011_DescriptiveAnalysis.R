@@ -38,3 +38,5 @@ ggplot(datasetCarsFinal,
   geom_point() +
   geom_smooth(method = 'lm') +
   facet_wrap(brand ~ .)
+
+ggplot(datasetCarsFinal, aes(brand)) + geom_bar()

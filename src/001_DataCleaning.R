@@ -184,6 +184,8 @@ colnames(zipcodes)[1] <- 'postalCode'
 datasetCarsFinal <- zipcodes[datasetCarsFinal, on = 'postalCode']
 datasetCarsFinal <- datasetCarsFinal[!is.na(datasetCarsFinal$state),]
 
+
+
 # Pretty Names -----------------------------------------------------------------
 datasetCarsFinal[, `:=` (brand = toupper(brand),
                          model = toupper(model))]

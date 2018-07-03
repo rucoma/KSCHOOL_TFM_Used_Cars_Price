@@ -2,66 +2,51 @@
 <html>
    <body>
 
-      <h2 style = "text-align: center;">Quote your car</h2>
-
-      {% for message in form.name.errors %}
-         <div>{{ message }}</div>
-      {% endfor %}
-
-      {% for message in form.email.errors %}
-         <div>{{ message }}</div>
-      {% endfor %}
-
+      <h2 style = "font-family:Helvetica;text-align: center; color: #FF7F50; font-size:40px">Quote your car!</h2>
+      <picture>
+          <img src="./src/FlaskApp/pics/used_cars.jpg" alt="Cars" style="width:auto;">
+      </picture>
       <form action = "http://localhost:5000/" method = post>
          <fieldset>
-            <legend>Select your car features</legend>
-            {{ form.hidden_tag() }}
+            <legend style = "font-family:Helvetica;color: #FF7F50; font-size:30px">Select your car features and press 'Send data'</legend>
+          <!--  {{ form.hidden_tag() }} -->
 
-            <div style = font-size:20px; font-weight:bold; margin-left:150px;>
+            <div style = font-size:20px; font-weight:bold; margin-left:150px; color: #00008B; font-family:Helvetica>
                {{ form.state.label }}<br>
                {{ form.state }}
                <br>
-
+               <br>
                {{ form.brandModel.label }}<br>
                 {{ form.brandModel }}
                 <br>
-
+                <br>
                {{ form.vehicleType.label }}<br>
                {{ form.vehicleType }}
                <br>
-
+               <br>
                {{ form.gearbox.label }}<br>
                {{ form.gearbox }}
                <br>
-
+               <br>
                {{ form.fuelType.label }}<br>
                {{ form.fuelType }}
                <br>
-
+               <br>
                {{ form.powerPS.label }}<br>
                {{ form.powerPS }}
                <br>
-
+               <br>
                {{ form.kilometerCategorical.label }}<br>
                {{ form.kilometerCategorical }}
                <br>
-
+               <br>
                {{ form.yearOfRegistration.label }}<br>
                {{ form.yearOfRegistration }}
                <br>
-
+               <br>
                {{ form.notRepairedDamage.label }}<br>
                {{ form.notRepairedDamage }}
                <br>
-
-               <!--
-               {{ form.Age.label }}<br>
-               {{ form.Age }}
-               <br>
-
-               {{ form.language.label }}<br>
-               {{ form.language }}
-               -->
                <br>
                {{ form.submit }}
             </div>

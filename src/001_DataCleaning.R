@@ -151,7 +151,7 @@ datasetCars[powerPS == min(powerPS)]
 datasetCars <- datasetCars[powerPS > 0 & powerPS <= 500]
 
 # Recodification no repaired damage
-datasetCars[is.na(notRepairedDamage), notRepairedDamage := 'Not applicable']
+datasetCars[is.na(notRepairedDamage), notRepairedDamage := 'nein']
 
 # We are not interested in auctions, only in direct sales
 datasetCars <- datasetCars[offerType != 'Gesuch']
@@ -159,6 +159,11 @@ datasetCars <- datasetCars[offerType != 'Gesuch']
 datasetCars <- datasetCars[seller == 'privat']
 # Removing model 'andere' = 'other'
 datasetCars <- datasetCars[model != 'andere']
+# Removing Fuel type 'andere' = 'other'
+datasetCars <- datasetCars[fuelType != 'andere']
+# Removing Vehicle type 'andere' = 'other'
+datasetCars <- datasetCars[vehicleType != 'andere']
+
 
 # Minimal dataset (removing samples with empty values and unused features)
 datasetCarsFinal <- datasetCars[!is.na(vehicleType) &

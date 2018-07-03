@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+   <body>
+
+      <h2 style = "text-align: center;">Quote your car</h2>
+
+      {% for message in form.name.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}
+
+      {% for message in form.email.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}
+
+      <form action = "http://localhost:5000/" method = post>
+         <fieldset>
+            <legend>Select your car features</legend>
+            {{ form.hidden_tag() }}
+
+            <div style = font-size:20px; font-weight:bold; margin-left:150px;>
+               {{ form.state.label }}<br>
+               {{ form.state }}
+               <br>
+
+               {{ form.brandModel.label }}<br>
+                {{ form.brandModel }}
+                <br>
+
+               {{ form.vehicleType.label }}<br>
+               {{ form.vehicleType }}
+               <br>
+
+               {{ form.gearbox.label }}<br>
+               {{ form.gearbox }}
+               <br>
+
+               {{ form.fuelType.label }}<br>
+               {{ form.fuelType }}
+               <br>
+
+               {{ form.powerPS.label }}<br>
+               {{ form.powerPS }}
+               <br>
+
+               {{ form.kilometerCategorical.label }}<br>
+               {{ form.kilometerCategorical }}
+               <br>
+
+               {{ form.yearOfRegistration.label }}<br>
+               {{ form.yearOfRegistration }}
+               <br>
+
+               {{ form.notRepairedDamage.label }}<br>
+               {{ form.notRepairedDamage }}
+               <br>
+
+               <!--
+               {{ form.Age.label }}<br>
+               {{ form.Age }}
+               <br>
+
+               {{ form.language.label }}<br>
+               {{ form.language }}
+               -->
+               <br>
+               {{ form.submit }}
+            </div>
+
+         </fieldset>
+      </form>
+
+   </body>
+</html>

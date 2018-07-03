@@ -14,7 +14,7 @@ library(choroplethrMaps)
 load(file = './data/datasetCarsFinal')
 
 
-theme <- ggplot2::theme(
+themeCharts <- ggplot2::theme(
   axis.title = element_text(colour = '#2D4471', size = 14),
   axis.text.x = element_text(colour = '#2D4471', size = 12, angle = 90, vjust = .5),
   axis.text.y = element_text(colour = '#2D4471', size = 12),
@@ -41,7 +41,7 @@ plotNumerical <- function(df, xvar, yvar, xName, yName, tit, subtit = NULL) {
     scale_x_continuous(name = xName) +
     scale_y_continuous(name = yName, labels = scales::dollar_format(prefix = '€')) +
     labs(title = tit, subtitle = subtit) +
-    theme
+    themeCharts
 }
 
 g1 <- plotNumerical(df = datasetCarsFinal, xvar = 'yearOfRegistration', yvar = 'price', xName = 'Year', yName = 'Price', tit = 'Price by Year')
@@ -58,7 +58,7 @@ gBoxplot1 <- ggplot(data = datasetCarsFinal,
   labs(title = 'Price boxplot by year', subtitle = NULL) +
   scale_x_continuous(name = 'Year', breaks = seq(1950, 2020, by = 10)) +
   scale_y_continuous(name = 'Price', labels = scales::dollar_format(prefix = '€')) +
-  theme
+  themeCharts
 gBoxplot1
 
 numericalCol <- c('yearOfRegistration', 'powerPS', 'kilometer', 'price')
@@ -80,7 +80,7 @@ gBoxplot2 <-
   scale_x_discrete(name = 'Brand') +
   scale_y_log10(name = 'Price (log scale)', labels = scales::dollar_format(prefix = '€')) +
   
-  theme
+  themeCharts
 gBoxplot2
 
 gCountBrand <- 
@@ -92,7 +92,7 @@ gCountBrand <-
   labs(title = 'Brand count', subtitle = NULL) +
   scale_x_discrete(name = 'Brand') +
   scale_y_continuous(name = 'Count', labels = comma) +
-  theme
+  themeCharts
 gCountBrand
 
 vehicleTypeEvol <- 
@@ -105,7 +105,7 @@ vehicleTypeEvol <-
   scale_x_continuous(name = 'Year', breaks = seq(1980, 2020, by = 10)) +
   scale_y_continuous(name = 'Count', labels = comma) +
   labs(title = 'Vehicle type evolution', subtitle = NULL) +
-  theme
+  themeCharts
 vehicleTypeEvol
 
 gearboxEvol <- 
@@ -118,7 +118,7 @@ gearboxEvol <-
   scale_x_continuous(name = 'Year', breaks = seq(1980, 2020, by = 10)) +
   scale_y_continuous(name = 'Count', labels = comma) +
   labs(title = 'Gearbox type evolution', subtitle = NULL) +
-  theme
+  themeCharts
 gearboxEvol
 
 fuelTypeEvol <- 
@@ -131,7 +131,7 @@ fuelTypeEvol <-
   scale_x_continuous(name = 'Year', breaks = seq(1980, 2020, by = 10)) +
   scale_y_continuous(name = 'Count', labels = comma) +
   labs(title = 'Fuel type evolution', subtitle = NULL) +
-  theme
+  themeCharts
 fuelTypeEvol
 
 grid.arrange(vehicleTypeEvol, gearboxEvol, fuelTypeEvol, nrow = 1)
@@ -161,4 +161,4 @@ treeMapBrands <-
 
 
 ## Geo data
-geoData <- datasetCarsFinal[, .(N = .N, averagePric = mean(price)), by = state]
+# geoData <- datasetCarsFinal[, .(N = .N, averagePric = mean(price)), by = state]

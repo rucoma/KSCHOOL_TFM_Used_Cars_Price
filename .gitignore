@@ -43,10 +43,10 @@ vignettes/*.pdf
 /data/Germany_shapefile/
 
 # Output files
-/output/102_RandomForest.pkl
-/output/102_RandomForestFinal.pkl
-/output/103_RandomForest.pkl
-/output/bestDecisiontree.pkl
+/output/bestDecisionTree.pkl
+/output/carsLabelEncoder.pkl
+/output/bestRandomForest.pkl
+/output/bestKNN.pkl
 /output/TFM_Used_Cars_Price_Dashboard.twb
 
 # Source files

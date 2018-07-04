@@ -20,6 +20,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.datasets import make_classification
 from collections import OrderedDict, defaultdict
 from sklearn.externals import joblib
+from sklearn.metrics import r2_score, mean_squared_error
 
 # read csv files
 datasetCarsFinal = pd.read_csv('./data/autosFinal.csv',

@@ -47,7 +47,10 @@ vignettes/*.pdf
 /output/carsLabelEncoder.pkl
 /output/bestRandomForest.pkl
 /output/bestKNN.pkl
+/output/bestBoost.pkl
+/output/modelizationResults.pkl
 /output/TFM_Used_Cars_Price_Dashboard.twb
+/output/modelizationResults.csv
 
 # Source files
 /src/'Data exploration and cleaning.ipynb'

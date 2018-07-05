@@ -2,4 +2,7 @@ data.md
 carsLabelEncoder.pkl
 bestRandomForest.pkl
 bestDecisionTree.pkl
+bestBoost.pkl
 bestKNN.pkl
+modelizationResults.pkl
+modelizationResults.csv

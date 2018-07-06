@@ -6,3 +6,4 @@ bestBoost.pkl
 bestKNN.pkl
 modelizationResults.pkl
 modelizationResults.csv
+testLabelEncoder.pkl

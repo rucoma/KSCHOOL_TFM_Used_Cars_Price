@@ -51,6 +51,7 @@ vignettes/*.pdf
 /output/modelizationResults.pkl
 /output/TFM_Used_Cars_Price_Dashboard.twb
 /output/modelizationResults.csv
+/output/testLabelEncoder.pkl
 
 # Source files
 /src/'Data exploration and cleaning.ipynb'

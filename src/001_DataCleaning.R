@@ -128,13 +128,13 @@ rm(list = c('categoricalCols', 'datasetCarsCategorical', 'datasetCarsNumerical',
 datasetCars[price == max(price)]
 datasetCars[price == min(price)]
 # Some prices will be dropped from dataset:
-datasetCars <- datasetCars[price > 200 & price <= 200000]
+datasetCars <- datasetCars[price > 200 & price <= 100000]
 
 # Year of registration
 datasetCars[yearOfRegistration == max(yearOfRegistration)]
 datasetCars[yearOfRegistration == min(yearOfRegistration)]
 # Some years will be dropped from dataset as well
-datasetCars <- datasetCars[yearOfRegistration > 1950 & yearOfRegistration < 2018]
+datasetCars <- datasetCars[yearOfRegistration > 1950 & yearOfRegistration < 2016]
 
 # Kilometer
 datasetCars[kilometer == max(kilometer)]
@@ -148,7 +148,7 @@ datasetCars[, kilometerCategorical := cut(x = kilometer,
 # Power PS
 datasetCars[powerPS == max(powerPS)]
 datasetCars[powerPS == min(powerPS)]
-datasetCars <- datasetCars[powerPS > 0 & powerPS <= 500]
+datasetCars <- datasetCars[powerPS > 0 & powerPS <= 400]
 
 # Recodification no repaired damage
 datasetCars[is.na(notRepairedDamage), notRepairedDamage := 'nein']
@@ -163,7 +163,6 @@ datasetCars <- datasetCars[model != 'andere']
 datasetCars <- datasetCars[fuelType != 'andere']
 # Removing Vehicle type 'andere' = 'other'
 datasetCars <- datasetCars[vehicleType != 'andere']
-
 
 # Minimal dataset (removing samples with empty values and unused features)
 datasetCarsFinal <- datasetCars[!is.na(vehicleType) &
@@ -180,9 +179,22 @@ datasetCarsFinal <- datasetCars[!is.na(vehicleType) &
 # Merge brand and model --------------------------------------------------------
 datasetCarsFinal[, brandModel := paste(brand, model, sep = ' ')]
 
+## Vehicle type cleaning (BUS is a type that coul be wrong for some models) ----
+modelTypeTypical <- datasetCarsFinal[, .(N = .N), by = .(brandModel, vehicleType)] %>% 
+  .[order(brandModel, -N)] %>% 
+  .[, .SD[1], by = brandModel] %>% 
+  .[, c('brandModel', 'vehicleType')]
+colnames(modelTypeTypical) <- c('brandModel', 'vehicleTypeTypical')
+
+datasetCarsFinal <- modelTypeTypical[datasetCarsFinal, on = 'brandModel']
+
+datasetCarsFinal <- datasetCarsFinal[, vehicleType := case_when(vehicleType == 'bus' ~ vehicleTypeTypical,
+                                                                TRUE ~ vehicleType)]
+datasetCarsFinal$vehicleTypeTypical <- NULL
+
 # Merge with postal Code Database ----------------------------------------------
 zipcodes <- fread(input = './data/zipcodes_de_completo.csv',
-                  select = c('zipcode', 'state', 'community'),
+                  select = c('zipcode', 'state'),
                   colClasses = c(rep('character', 11)))
 zipcodes <- zipcodes[!duplicated(zipcodes)]
 colnames(zipcodes)[1] <- 'postalCode'
@@ -197,8 +209,13 @@ datasetCarsFinal[, `:=` (brand = toupper(brand),
 datasetCarsFinal[, `:=` (brand = gsub(pattern = '_', replacement = ' ', x = brand))]
 
 # Convert to factor ------------------------------------------------------------
-charToFactor <- c('postalCode', 'state', 'community', 'brand', 'model', 'brandModel')
+charToFactor <- c('postalCode', 'state', 'brand', 'model', 'brandModel')
 datasetCarsFinal[, (charToFactor) := lapply(.SD, as.factor), .SDcols = charToFactor]
+
+# Columns in correct order -----------------------------------------------------
+datasetCarsFinal <- datasetCarsFinal[, c('postalCode', 'state', 'brand', 'model', 'brandModel', 'vehicleType', 
+                                         'gearbox', 'fuelType', 'notRepairedDamage', 'kilometerCategorical',
+                                         'kilometer','powerPS', 'yearOfRegistration', 'price')]
 
 # Save dataset -----------------------------------------------------------------
 save(datasetCars, file = './data/datasetCars')

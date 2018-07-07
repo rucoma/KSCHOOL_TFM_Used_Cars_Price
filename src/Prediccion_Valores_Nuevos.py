@@ -69,18 +69,22 @@ datasetCarsFinalConcat = pd.concat([categorical_encoded, numerical], axis=1)
 joblib.dump(d, './output/testLabelEncoder.pkl')
 
 #d = joblib.load('./output/carsLabelEncoder.pkl')
+bestDecisionTree = joblib.load('./output/bestDecisionTree.pkl')
+bestRandomForest = joblib.load('./output/bestRandomForest.pkl')
 bestKNN = joblib.load('./output/bestKNN.pkl')
+bestBoost = joblib.load('./output/bestBoost.pkl')
+
 d2 = joblib.load('./output/testLabelEncoder.pkl')
 
-newData = pd.DataFrame({'state': ['Bayern', 'Hessen'],
-                        'vehicleType': ['limousine', 'cabrio'],
-                        'yearOfRegistration': [2000, 2015],
-                        'gearbox': ['manuell', 'automatik'],
-                        'powerPS': [25, 90],
-                        'fuelType': ['benzin', 'benzin'],
-                        'notRepairedDamage': ['nein', 'nein'],
-                        'kilometer': [10000, 50000],
-                        'brandModel': ['mini clubman', 'renault laguna']})
+newData = pd.DataFrame({'state': ['Bayern', 'Bayern'],
+                        'vehicleType': ['cabrio', 'cabrio'],
+                        'yearOfRegistration': [2015, 2015],
+                        'gearbox': ['manuell', 'manuell'],
+                        'powerPS': [90, 50],
+                        'fuelType': ['diesel', 'diesel'],
+                        'notRepairedDamage': ['ja', 'ja'],
+                        'kilometer': [150000, 5000],
+                        'brandModel': ['mini clubman', 'mini clubman']})
 
 numericalNew = newData[['yearOfRegistration', 'powerPS', 'kilometer']]
 categoricalNew = newData.drop(['yearOfRegistration', 'powerPS', 'kilometer'], axis=1)
@@ -89,4 +93,8 @@ categoricalNew = newData.drop(['yearOfRegistration', 'powerPS', 'kilometer'], ax
 
 newDataEncoded = categoricalNew.apply(lambda x: d2[x.name].transform(x))
 newDataEncodedConcat = pd.concat([newDataEncoded, numericalNew], axis=1)
+
+bestDecisionTree.predict(newDataEncodedConcat)
+bestRandomForest.predict(newDataEncodedConcat)
 bestKNN.predict(newDataEncodedConcat)
+bestBoost.predict(newDataEncodedConcat)

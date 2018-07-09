@@ -7,3 +7,4 @@ bestKNN.pkl
 modelizationResults.pkl
 modelizationResults.csv
 testLabelEncoder.pkl
+decision_tree.dot

@@ -119,7 +119,7 @@ dfLander <- data.frame(state = shapefileLander@data$GEN,
 
 centroids <- as.data.frame(coordinates(shapefileLander)) %>% 
   rename(long = V1, lat = V2) %>% 
-  mutate(id = seq(0, nrow(centroids) - 1)) %>% 
+  mutate(id = seq(0, nrow(.) - 1)) %>% 
   left_join(., dfLander, by ='id') %>% 
   setDT()
 

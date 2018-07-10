@@ -58,6 +58,7 @@ vignettes/*.pdf
 /src/'Data exploration and cleaning.nb.html'
 /src/'Data exploration and cleaning.Rmd'
 /src/.ipynb_checkpoints
+.ipynb_checkpoints/*
 
 
 # Files in project folder

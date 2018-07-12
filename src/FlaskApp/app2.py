@@ -58,6 +58,7 @@ datasetCarsFinal = pd.read_csv('./data/autosFinal.csv',
                                       })
 
 bestBoost = joblib.load('./output/bestBoost.pkl')
+le = joblib.load('./output/carsLabelEncoder.pkl')
 
 class DataForm(Form):
     state = SelectField('Which is your Lander?', 
@@ -84,23 +85,58 @@ class DataForm(Form):
 def contact():
    form = DataForm()
    
-   '''
-    Codigo Original   
+
+#    Codigo Original   
    if request.method == 'POST':
-      if form.validate() == False:
+      if form.validate() == True:
          flash('All fields are required.')
          return render_template('form.html', form = form)
       else:
-         return render_template('success.html')
+#         state = form.get('state')
+#         kilometer = form.get('kilometer')
+         state = request.form['state']
+         brandModel = request.form['brandModel']
+         vehicleType = request.form['vehicleType']
+         gearbox = request.form['gearbox']
+         fuelType = request.form['fuelType']
+         powerPS = request.form['powerPS']
+         kilometer = request.form['kilometer']
+         yearOfRegistration = request.form['yearOfRegistration']
+         notRepairedDamage = request.form['notRepairedDamage']
+         
+         '''
+         Aqui meter el codigo para label encoder y predict
+         '''
+         
+         return render_template('success.html', 
+                                state=state, 
+                                brandModel=brandModel,
+                                vehicleType=vehicleType,
+                                gearbox=gearbox,
+                                fuelType=fuelType,
+                                powerPS=powerPS,
+                                kilometer=kilometer,
+                                yearOfRegistration=yearOfRegistration,
+                                notRepairedDamage=notRepairedDamage)
    elif request.method == 'GET':
          return render_template('form.html', form = form)
+   
    '''
+   Nuevo codigo
    if request.method == 'POST':
        if form.validate == False:
            return render_template('success.html')
        else:
            return render_template('form.html', form = form)
-   
+   '''
+
+@app.route('/another', methods=['GET', 'POST'])
+def hello():
+    form = DataForm()
+    
+    if request.method == 'POST':
+        return render_template('form.html', form = form)
+
 
 if __name__ == '__main__':
     app.run(debug = True)

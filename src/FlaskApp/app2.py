@@ -14,6 +14,8 @@ from wtforms import Form, BooleanField, StringField, PasswordField, validators, 
 import pandas as pd
 import numpy as np
 from sklearn.externals import joblib
+from sklearn import preprocessing
+from collections import defaultdict
 
 app = Flask(__name__)
 app.secret_key = 'development key'
@@ -59,14 +61,15 @@ datasetCarsFinal = pd.read_csv('./data/autosFinal.csv',
                                       })
 
 bestBoost = joblib.load('./output/bestBoost.pkl')
-le = joblib.load('./output/carsLabelEncoder.pkl')
+bestDecisionTree = joblib.load('./output/bestDecisionTree.pkl')
+d = joblib.load('./output/carsLabelEncoder.pkl')
 
 class DataForm(Form):
-    state = SelectField('Which is your Lander?',
+    state = SelectField('Which is your länder?',
                         choices = [(x, x) for x in sorted(pd.unique(datasetCarsFinal.state))])
-    brandModel = SelectField('Brand and Model of the car',
+    brandModel = SelectField('Brand and model of the car',
                              choices = [(x, x) for x in sorted(pd.unique(datasetCarsFinal.brandModel))])
-    vehicleType = SelectField('Vehicle Type',
+    vehicleType = SelectField('Vehicle type',
                              choices = [(x, x) for x in sorted(pd.unique(datasetCarsFinal.vehicleType))])
     gearbox = SelectField('Gearbox',
                              choices = [(x, x) for x in sorted(pd.unique(datasetCarsFinal.gearbox))])
@@ -77,7 +80,7 @@ class DataForm(Form):
     kilometer = SelectField('Kilometers',
                              choices = [(x, x) for x in sorted(pd.unique(datasetCarsFinal.kilometer))])
     yearOfRegistration = SelectField('Year of registration',
-                             choices = [(x, x) for x in np.arange(datasetCarsFinal.yearOfRegistration.min() + 1, datasetCarsFinal.yearOfRegistration.max())])
+                             choices = [(x, x) for x in np.arange(datasetCarsFinal.yearOfRegistration.max() + 1, datasetCarsFinal.yearOfRegistration.min(), -1)])
     notRepairedDamage = SelectField('Has the car a damage pending to repair?',
                              choices = [(x, x) for x in sorted(pd.unique(datasetCarsFinal.notRepairedDamage))])
     submit = SubmitField("Send data")
@@ -85,58 +88,66 @@ class DataForm(Form):
 @app.route('/', methods=['GET', 'POST'])
 def contact():
    form = DataForm()
-
-
-#    Codigo Original
    if request.method == 'POST':
-      if form.validate() == True:
-         flash('All fields are required.')
-         return render_template('form.html', form = form)
-      else:
-#         state = form.get('state')
-#         kilometer = form.get('kilometer')
-         state = request.form['state']
-         brandModel = request.form['brandModel']
-         vehicleType = request.form['vehicleType']
-         gearbox = request.form['gearbox']
-         fuelType = request.form['fuelType']
-         powerPS = request.form['powerPS']
-         kilometer = request.form['kilometer']
-         yearOfRegistration = request.form['yearOfRegistration']
-         notRepairedDamage = request.form['notRepairedDamage']
-
-         '''
-         Aqui meter el codigo para label encoder y predict
-         '''
-
-         return render_template('success.html',
-                                state=state,
-                                brandModel=brandModel,
-                                vehicleType=vehicleType,
-                                gearbox=gearbox,
-                                fuelType=fuelType,
-                                powerPS=powerPS,
-                                kilometer=kilometer,
-                                yearOfRegistration=yearOfRegistration,
-                                notRepairedDamage=notRepairedDamage)
-   elif request.method == 'GET':
-         return render_template('form.html', form = form)
-
-   '''
-   Nuevo codigo
-   if request.method == 'POST':
-       if form.validate == False:
-           return render_template('success.html')
-       else:
+       if form.validate() == True:
+           flash('All fields are required.')
            return render_template('form.html', form = form)
-   '''
+       else:
+           state = request.form['state']
+           brandModel = request.form['brandModel']
+           vehicleType = request.form['vehicleType']
+           gearbox = request.form['gearbox']
+           fuelType = request.form['fuelType']
+           powerPS = request.form['powerPS']
+           kilometer = request.form['kilometer']
+           yearOfRegistration = request.form['yearOfRegistration']
+           notRepairedDamage = request.form['notRepairedDamage']
 
-@app.route('/another', methods=['GET', 'POST'])
-def hello():
-    form = DataForm()
+         
+           df_categorical = pd.DataFrame({
+                   'state': [state],
+                   'brandModel': [brandModel],
+                   'vehicleType': [vehicleType],
+                   'gearbox': [gearbox],
+                   'fuelType': [fuelType],
+                   'notRepairedDamage': [notRepairedDamage]
+                   })
+    
+           df_numerical = pd.DataFrame({
+                   'yearOfRegistration': [yearOfRegistration],
+                   'powerPS': [powerPS],
+                   'kilometer': [kilometer]
+                   })
+    
+           df_encoded = df_categorical.apply(lambda x: d[x.name].transform(x))
+        
+           df = pd.concat([df_encoded, df_numerical], axis=1)
+        
+           priceBoost = int(round(bestBoost.predict(df)[0]))
+           priceDecisiontree = int(round(bestDecisionTree.predict(df)[0]))
 
-    if request.method == 'POST':
-        return render_template('form.html', form = form)
+           return render_template('success.html',
+                                  state=state,
+                                  brandModel=brandModel,
+                                  vehicleType=vehicleType,
+                                  gearbox=gearbox,
+                                  fuelType=fuelType,
+                                  powerPS=powerPS,
+                                  kilometer=kilometer,
+                                  yearOfRegistration=yearOfRegistration,
+                                  notRepairedDamage=notRepairedDamage,
+                                  priceBoost=priceBoost,
+                                  priceDecisiontree=priceDecisiontree)
+         
+   elif request.method == 'GET':
+       return render_template('form.html', form = form)
+
+#@app.route('/', methods=['GET', 'POST'])
+#def another():
+#    form = DataForm()
+#
+#    if request.method == 'POST':
+#        return render_template('form.html', form = form)
 
 
 if __name__ == '__main__':

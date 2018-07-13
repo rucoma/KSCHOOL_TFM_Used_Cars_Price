@@ -1,16 +1,42 @@
 <!doctype html>
 <html>
    <body>
-
-      Good!!
-
-      <br>
-
-      <h2>Your state is {{state}}, your car {{brandModel}} of type {{vehicleType}}, with gearbox {{gearbox}}, {{fuelType}}, {{powerPS}} of Power PS, {{kilometer}} kilometers, from year {{yearOfRegistration}} and not reparired damage ({{notRepairedDamage}})</h2>
+      <div style = "font-size:16px; font-weight:bold; margin-left:50px; color: #00008B; font-family:Helvetica">
 
       <br>
 
-      <a href="127.0.0.1:500/another">Get another quote</a>
+      <h1 style = "color: #FF7F50; font-family:Helvetica">Car features:</h1>
 
+      <br>
+
+      <h3>Länder: {{state}}</h3>
+
+      <h3>Brand and model: {{brandModel}}</h3>
+
+      <h3>Type: {{vehicleType}}</h3>
+
+      <h3>Gearbox: {{gearbox}}</h3>
+
+      <h3>Fuel type: {{fuelType}}</h3>
+
+      <h3>Power PS: {{powerPS}}</h3>
+
+      <h3>Kilometers: {{kilometer}}</h3>
+
+      <h3>Year of registration: {{yearOfRegistration}}</h3>
+
+      <h3>The car has a repaired damage? {{notRepairedDamage}}</h3>
+
+      <br>
+
+      <h1 style = "color: #FF7F50; font-family:Helvetica">Boost: The estimated price of your car is: {{priceBoost}}€</h1>
+      <h1 style = "color: #FF7F50; font-family:Helvetica">Decision Tree: The estimated price of your car is: {{priceDecisiontree}}€</h1>
+
+      <br>
+
+      <hr size="2" color="#00008B" align="CENTER">
+
+      <a href="http://localhost:5000/">Get another quote</a>
+    </div>
    </body>
 </html>

@@ -27,12 +27,21 @@ Dataset contains different descriptive features of the vehicles like brand, mode
 * postalCode
 * lastSeenOnline : when the crawler saw this ad last online. Won't be used in the project.
 
+### Required hardware  
+Project has been developed on an Intel Core i7 PC with 4 cores and 16Gb RAM. It should not be a problem not to have that hardware settings, but some scripts use a lot of resources.  
+
+### Required software  
+OS used in the project has been Linux, so it's the recommended system to run it. R and Python has been used to create the scripts, so it will be necessary to install both to run the scripts:  
+* [Anaconda](https://www.anaconda.com/download/#linux)  
+* [R](https://cran.r-project.org/)  
+* [R Studio](https://www.rstudio.com/products/rstudio/download/)  
+
 ### Project setup  
-After cloning the repository it's necessary to install the Anaconda environment found in `./data/rucoma.yml`.  
+After cloning the repository it's necessary to install the Anaconda environment found in `./data/rucoma.yml`. Just type in a terminal: `conda env create -f rucoma.yml` and then `source activate rucoma`
 Project is based on Jupyter notebooks. Both R and Python kernels are used, so it's important to activate the provided environment because R kernel is not included by default in Anaconda installation.
 
 ### Project steps:
-* Data exploration and cleaning:
-* Data visualization
-* Modeling
-* Prediction of price using new data.
+* **Data exploration and cleaning**: Jupyter notebook with R kernel, found in `./output/Data exploration and cleaning.ipynb`. This notebook covers all the data acquisition and cleaning phase to prepare dataset for modeling.  
+* **Data visualization**: Jupyter notebook with R kernel, found in `./output/Data visualization.ipynb`. This notebook inspects the dataset to understand the structure of data and get some useful insights.
+* **Modeling**: Jupyter notebook with Python kernel, found in `./output/Modeling.ipynb`. This notebooks applies different machine learning algorithms to the dataset in order to predict the price of cars in the most precise way.  
+* **Prediction of price using new data**: Little Flask web application tha allows to quote your used car. It can be run typing in a terminal: `python ./src/FlaskApp/app.py`. Then in a browser enter the url: `http://localhost:5000/`.

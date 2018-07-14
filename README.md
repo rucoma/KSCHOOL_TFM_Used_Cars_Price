@@ -15,7 +15,7 @@ Dataset contains different descriptive features of the vehicles like brand, mode
 * vehicleType: coupe, SUV, cabrio, limousine, etc
 * yearOfRegistration : at which year the car was first registered
 * gearbox: Type of transmission
-* powerPS : power of the car in PS
+* powerPS : power of the car in PS (Horse Power)
 * model
 * kilometer : how many kilometers the car has driven
 * monthOfRegistration : at which month the car was first registered
@@ -26,6 +26,8 @@ Dataset contains different descriptive features of the vehicles like brand, mode
 * nrOfPictures : number of pictures in the ad (this field contains only 0, won't use)
 * postalCode
 * lastSeenOnline : when the crawler saw this ad last online. Won't be used in the project.
+
+## Project manual  
 
 ### Required hardware  
 Project has been developed on an Intel Core i7 PC with 4 cores and 16Gb RAM. It should not be a problem not to have that hardware settings, but some scripts use a lot of resources.  
@@ -43,5 +45,5 @@ Project is based on Jupyter notebooks. Both R and Python kernels are used, so it
 ### Project steps:
 * **Data exploration and cleaning**: Jupyter notebook with R kernel, found in `./output/Data exploration and cleaning.ipynb`. This notebook covers all the data acquisition and cleaning phase to prepare dataset for modeling.  
 * **Data visualization**: Jupyter notebook with R kernel, found in `./output/Data visualization.ipynb`. This notebook inspects the dataset to understand the structure of data and get some useful insights.
-* **Modeling**: Jupyter notebook with Python kernel, found in `./output/Modeling.ipynb`. This notebooks applies different machine learning algorithms to the dataset in order to predict the price of cars in the most precise way.  
+* **Modeling**: Jupyter notebook with Python kernel, found in `./output/Modeling.ipynb`. This notebooks applies different machine learning algorithms to the dataset in order to predict the price of cars in the most precise way. **WARNING**: some algorithms can take a long time to run
 * **Prediction of price using new data**: Little Flask web application tha allows to quote your used car. It can be run typing in a terminal: `python ./src/FlaskApp/app.py`. Then in a browser enter the url: `http://localhost:5000/`.

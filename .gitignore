@@ -46,14 +46,14 @@ vignettes/*.pdf
 /data/Germany_shapefile/
 
 # Output files
-/output/bestDecisionTree.pkl
-/output/carsLabelEncoder.pkl
-/output/bestRandomForest.pkl
-/output/bestKNN.pkl
-/output/bestBoost.pkl
+#/output/bestDecisionTree.pkl
+#/output/carsLabelEncoder.pkl
+#/output/bestRandomForest.pkl
+#/output/bestKNN.pkl
+#/output/bestBoost.pkl
 /output/modelizationResults.pkl
 /output/TFM_Used_Cars_Price_Dashboard.twb
-/output/modelizationResults.csv
+#/output/modelizationResults.csv
 /output/testLabelEncoder.pkl
 
 # Source files

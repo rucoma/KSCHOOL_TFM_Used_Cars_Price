@@ -81,7 +81,7 @@ class DataForm(Form):
                              choices = [(x, x) for x in sorted(pd.unique(datasetCarsFinal.kilometer))])
     yearOfRegistration = SelectField('Year of registration',
                              choices = [(x, x) for x in np.arange(datasetCarsFinal.yearOfRegistration.max() + 1, datasetCarsFinal.yearOfRegistration.min(), -1)])
-    notRepairedDamage = SelectField('Has the car a damage pending to repair?',
+    notRepairedDamage = SelectField('Does the car have a damage pending to repair?',
                              choices = [(x, x) for x in sorted(pd.unique(datasetCarsFinal.notRepairedDamage))])
     submit = SubmitField("Send data")
 
@@ -103,7 +103,7 @@ def contact():
            yearOfRegistration = request.form['yearOfRegistration']
            notRepairedDamage = request.form['notRepairedDamage']
 
-         
+
            df_categorical = pd.DataFrame({
                    'state': [state],
                    'brandModel': [brandModel],
@@ -112,17 +112,17 @@ def contact():
                    'fuelType': [fuelType],
                    'notRepairedDamage': [notRepairedDamage]
                    })
-    
+
            df_numerical = pd.DataFrame({
                    'yearOfRegistration': [yearOfRegistration],
                    'powerPS': [powerPS],
                    'kilometer': [kilometer]
                    })
-    
+
            df_encoded = df_categorical.apply(lambda x: d[x.name].transform(x))
-        
+
            df = pd.concat([df_encoded, df_numerical], axis=1)
-        
+
            priceBoost = int(round(bestBoost.predict(df)[0]))
            priceDecisiontree = int(round(bestDecisionTree.predict(df)[0]))
 
@@ -138,7 +138,7 @@ def contact():
                                   notRepairedDamage=notRepairedDamage,
                                   priceBoost=priceBoost,
                                   priceDecisiontree=priceDecisiontree)
-         
+
    elif request.method == 'GET':
        return render_template('form.html', form = form)
 

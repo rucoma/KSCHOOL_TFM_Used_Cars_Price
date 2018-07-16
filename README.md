@@ -1,6 +1,6 @@
-# KSchool I Data Science Master
+# KSchool: I Data Science Master
 
-## Final project: Price prediction model of used cars
+## Final project: Predictive model of the price of used cars
 
 From a dataset from [Kaggle](https://www.kaggle.com/orgesleka/used-cars-database), consisting in 370k samples of used cars on sale on [eBay Classifieds Germany](https://www.ebay-kleinanzeigen.de/) we will try to build a predictive model that gives us information about the approximate sales price at which users should put their cars on the website.
 
@@ -39,11 +39,23 @@ OS used in the project has been Linux, so it's the recommended system to run it.
 * [R Studio](https://www.rstudio.com/products/rstudio/download/)  
 
 ### Project setup  
-After cloning the repository it's necessary to install the Anaconda environment found in `./data/rucoma.yml`. Just type in a terminal: `conda env create -f rucoma.yml` and then `source activate rucoma`
-Project is based on Jupyter notebooks. Both R and Python kernels are used, so it's important to activate the provided environment because R kernel is not included by default in Anaconda installation.
+After cloning the repository it's necessary to install the Anaconda environment found in `./data/TFM.yml`. Just type in a terminal: `conda env create -f TFM.yml` and then `source activate TFM`.  
+Project is based on Jupyter notebooks. Both R and Python kernels are used, so it's important to activate the provided environment because R kernel is not included by default in Anaconda installation.  
+If for some reason, TFM environment fails to activate (due to incompatibilities with your system), it will be necessary to install the following libraries using `conda install`:
+* numpy
+* pandas
+* matplotlib
+* scipy
+* scikit-learn
+* flask
+* collections
+* wtforms
+* R kernel for Jupyter notebooks: `conda install -c r r-irkernel`
 
 ### Project steps:
-* **Data exploration and cleaning**: Jupyter notebook with R kernel, found in `./output/Data exploration and cleaning.ipynb`. This notebook covers all the data acquisition and cleaning phase to prepare dataset for modeling.  
-* **Data visualization**: Jupyter notebook with R kernel, found in `./output/Data visualization.ipynb`. This notebook inspects the dataset to understand the structure of data and get some useful insights.
-* **Modeling**: Jupyter notebook with Python kernel, found in `./output/Modeling.ipynb`. This notebooks applies different machine learning algorithms to the dataset in order to predict the price of cars in the most precise way. **WARNING**: some algorithms can take a long time to run
-* **Prediction of price using new data**: Little Flask web application tha allows to quote your used car. It can be run typing in a terminal: `python ./src/FlaskApp/app.py`. Then in a browser enter the url: `http://localhost:5000/`.
+* **Introduction**: Jupyter notebook, found in `./src/00 - Introduction.ipynb`. This notebook includes some explanation about the project and the approach.
+* **Data exploration and cleaning**: Jupyter notebook with R kernel, found in `./src/01 - Data exploration and cleaning.ipynb`. This notebook covers all the data acquisition and cleaning phase to prepare dataset for modeling.  
+* **Data visualization**: Jupyter notebook with R kernel, found in `./src/02 - Data visualization.ipynb`. This notebook inspects the dataset to understand the structure of data and get some useful insights.
+* **Modeling**: Jupyter notebook with Python kernel, found in `./src/03 - Modeling.ipynb`. This notebooks applies different machine learning algorithms to the dataset in order to predict the price of cars in the most precise way. **WARNING**: some algorithms can take a long time to run
+* **Prediction of price using new data**: Little Flask web application tha allows to quote your used car. It can be run typing in a terminal: `python ./src/FlaskApp/app.py`. Then, in a browser enter the url: `http://localhost:5000/`. Select the features of your car and press **'Send data'** button to get the estimated price.
+* **Conclussions & results**: Jupyter notebook, found in `./src/04 - Conclussions and results.ipynb`. This notebook includes the main findings on the project.

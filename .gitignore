@@ -2,6 +2,9 @@
 .Rhistory
 .Rapp.history
 
+# Notebook checkpoints
+.ipynb_checkpoints/*
+
 # Session Data files
 .RData
 

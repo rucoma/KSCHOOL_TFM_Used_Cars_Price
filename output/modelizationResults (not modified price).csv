@@ -1,0 +1,9 @@
+,Algorithm,Fine_Tuning,R2_Train,R2_Test,MAE_Train,MAE_Test
+0,Decision trees,0.0,0.989,0.863,269.0,1278.0
+0,Decision trees,1.0,0.943,0.883,926.0,1263.0
+0,Random Forest,0.0,0.975,0.907,572.0,1132.0
+0,Random Forest,1.0,0.897,0.881,1382.0,1445.0
+0,K-nearest neighbours,0.0,0.9,0.839,1131.0,1445.0
+0,K-nearest neighbours,1.0,0.989,0.86,273.0,1276.0
+0,Gradient Boosting,0.0,0.847,0.836,1519.0,1556.0
+0,Gradient Boosting,1.0,0.931,0.911,1108.0,1172.0
